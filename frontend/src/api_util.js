@@ -3,7 +3,7 @@ import { useGoals } from "./context/GoalsContext";
 
 export const createGoal = async goal => {
     try {
-        const res = await fetch(`${API_URL}/goals?user_id=1`, {
+        const res = await fetch(`${API_URL}/api/goals?user_id=1`, {
             method: 'POST',
             // credentials: 'include',
             headers: {
@@ -20,7 +20,7 @@ export const createGoal = async goal => {
 
 export const modifyGoal = async (goal)=> {
     try {
-        const res = await fetch(`${API_URL}/goals/${goal.id}`, {
+        const res = await fetch(`${API_URL}/api/goals/${goal.id}`, {
             method: 'PATCH',
             // credentials: 'include',
             headers: {
@@ -36,7 +36,7 @@ export const modifyGoal = async (goal)=> {
 }
 export const deleteGoal = async (goal_id)=> {
     try{
-        const res = await fetch(`${API_URL}/goals/${goal_id}`, {
+        const res = await fetch(`${API_URL}/api/goals/${goal_id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ export const deleteGoal = async (goal_id)=> {
 }
 
 export const getUsers = () => {
-    fetch(`${API_URL}/users`, {
+    fetch(`${API_URL}/api/users`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export const getUsers = () => {
 
 export const getUserGoals = async(userId) => {
     try{
-        const res = await fetch(`${API_URL}/goals/${userId}`, {
+        const res = await fetch(`${API_URL}/api/goals/${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI, Request, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from openai import OpenAI
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -45,6 +46,11 @@ app.add_middleware(
     allow_headers=["*"],     # Allow all headers
 )
 
+# Serve React static files
+if os.getenv("ENVIRONMENT") == "production":
+    dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
+    app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
+
 @app.post("/chat", description="Get chat responses through this POST endpoint") 
 async def chat(request: Request):
     body = await request.json()
@@ -78,27 +84,27 @@ async def generate_text(request: PromptRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/users/", response_model=schemas.User)
+@app.post("/api/users/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
-@app.post("/goals/", response_model=schemas.Goal)
+@app.post("/api/goals/", response_model=schemas.Goal)
 def create_goal(goal: schemas.GoalCreate, user_id: int, db: Session = Depends(get_db)):
     return crud.create_goal(db=db, goal=goal, user_id=user_id)
 
-@app.patch("/goals/{goal_id}", response_model=schemas.Goal)
+@app.patch("/api/goals/{goal_id}", response_model=schemas.Goal)
 def update_goal(goal: schemas.GoalCreate, goal_id: int, db: Session = Depends(get_db)):
     return crud.update_goal(db=db, update_goal=goal, goal_id=goal_id)
 
-@app.delete("/goals/{goal_id}", response_model=None)
+@app.delete("/api/goals/{goal_id}", response_model=None)
 def delete_goal(goal_id: int, db: Session = Depends(get_db)):
     return crud.delete_goal(db=db, goal_id=goal_id)
 
-@app.get("/goals/{user_id}", response_model=list[schemas.Goal])
+@app.get("/api/goals/{user_id}", response_model=list[schemas.Goal])
 def read_goals(user_id: int, db: Session = Depends(get_db)):
     return crud.get_goals(db=db, user_id=user_id)
 
-@app.get("/users", response_model=list[schemas.User])
+@app.get("/api/users", response_model=list[schemas.User])
 def get_users(db: Session = Depends(get_db)):
     return crud.get_users(db=db)
 
