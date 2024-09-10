@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from . import models, schemas, crud, database
-# from src.auth import create_access_token, get_current_user, verify_password, User, Token, TokenData
+# from backend.src.auth import create_access_token, get_current_user, verify_password, User, Token, TokenData
 
 # Load environment variables from .env file
 load_dotenv()
