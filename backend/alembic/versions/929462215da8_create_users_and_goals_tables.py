@@ -30,7 +30,9 @@ def upgrade() -> None:
     op.create_table('goals',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(), nullable=True),
-    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('description', sa.String(), nullable=True),
+    sa.Column('status', sa.String(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )

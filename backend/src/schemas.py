@@ -1,10 +1,21 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class GoalBase(BaseModel):
     title: str
+    description: str
+    status: str
 
 class GoalCreate(GoalBase):
     pass
+
+class GoalUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = None
+
+class GoalResponse(GoalBase):
+    id: int
 
 class Goal(GoalBase):
     id: int

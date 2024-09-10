@@ -86,6 +86,14 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 def create_goal(goal: schemas.GoalCreate, user_id: int, db: Session = Depends(get_db)):
     return crud.create_goal(db=db, goal=goal, user_id=user_id)
 
+@app.patch("/goals/{goal_id}", response_model=schemas.Goal)
+def update_goal(goal: schemas.GoalCreate, goal_id: int, db: Session = Depends(get_db)):
+    return crud.update_goal(db=db, update_goal=goal, goal_id=goal_id)
+
+@app.delete("/goals/{goal_id}", response_model=None)
+def delete_goal(goal_id: int, db: Session = Depends(get_db)):
+    return crud.delete_goal(db=db, goal_id=goal_id)
+
 @app.get("/goals/{user_id}", response_model=list[schemas.Goal])
 def read_goals(user_id: int, db: Session = Depends(get_db)):
     return crud.get_goals(db=db, user_id=user_id)
