@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from . import models, schemas, crud, database
-from src.auth import create_access_token, get_current_user, verify_password, User, Token, TokenData
+# from src.auth import create_access_token, get_current_user, verify_password, User, Token, TokenData
 
 # Load environment variables from .env file
 load_dotenv()
@@ -50,12 +50,6 @@ async def chat(request: Request):
     body = await request.json()
     return JSONResponse(content={"Your message": body}, status_code=200)
 
-
-
-@app.get('/users')
-def users():
-    return JSONResponse(content={"Your message": 'users'}, status_code=200)
-
 # Define a request model
 class PromptRequest(BaseModel):
     prompt: str
@@ -96,21 +90,25 @@ def create_goal(goal: schemas.GoalCreate, user_id: int, db: Session = Depends(ge
 def read_goals(user_id: int, db: Session = Depends(get_db)):
     return crud.get_goals(db=db, user_id=user_id)
 
-@app.post("/token", response_model=Token)
-def login(form_data: User, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.username == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.hashed_password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-        )
-    access_token = create_access_token(data={"username": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+@app.get("/users", response_model=list[schemas.User])
+def get_users(db: Session = Depends(get_db)):
+    return crud.get_users(db=db)
 
-@app.get("/users/me", response_model=User)
-def read_users_me(current_user: TokenData = Depends(get_current_user)):
-    return current_user
+# @app.post("/token", response_model=Token)
+# def login(form_data: User, db: Session = Depends(get_db)):
+#     user = db.query(models.User).filter(models.User.username == form_data.username).first()
+#     if not user or not verify_password(form_data.password, user.hashed_password):
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="Incorrect username or password",
+#         )
+#     access_token = create_access_token(data={"username": user.username})
+#     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.get("/secure-endpoint")
-def secure_endpoint(current_user: TokenData = Depends(get_current_user)):
-    return {"message": "This is a secure endpoint", "user": current_user.username}
+# @app.get("/users/me", response_model=User)
+# def read_users_me(current_user: TokenData = Depends(get_current_user)):
+#     return current_user
+
+# @app.get("/secure-endpoint")
+# def secure_endpoint(current_user: TokenData = Depends(get_current_user)):
+#     return {"message": "This is a secure endpoint", "user": current_user.username}

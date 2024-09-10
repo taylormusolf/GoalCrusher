@@ -11,11 +11,11 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    # hashed_password = Column(String)
     goals = relationship("Goal", back_populates="owner")
 
-    def verify_password(self, password: str):
-        return verify_password(password, self.hashed_password)
+    # def verify_password(self, password: str):
+    #     return verify_password(password, self.hashed_password)
 
 class Goal(Base):
     __tablename__ = "goals"

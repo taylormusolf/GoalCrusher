@@ -11,6 +11,9 @@ def create_user(db: Session, user: schemas.UserCreate):
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
+def get_users(db: Session):
+    return db.query(models.User)
+
 def create_goal(db: Session, goal: schemas.GoalCreate, user_id: int):
     db_goal = models.Goal(**goal.dict(), user_id=user_id)
     db.add(db_goal)
