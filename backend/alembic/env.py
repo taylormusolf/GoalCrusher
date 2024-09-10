@@ -16,12 +16,22 @@ from src import models  # Adjust this import according to your project structure
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option('sqlalchemy.url', os.getenv('DATABASE_URL'))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+def get_database_url():
+    url = os.getenv("DATABASE_URL")
+    if url and url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    return url
+
+
+config.set_main_option('sqlalchemy.url', get_database_url())
+
+
 
 # add your model's MetaData object here
 # for 'autogenerate' support
