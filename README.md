@@ -1,4 +1,5 @@
-# Goal Crusher Application
+![goalcrusher](https://github.com/user-attachments/assets/2b28b353-6dbe-40ab-a3d9-5d7fd7d0262b)
+
 ### Overview
 Goal Crusher is a simple web application designed to help users set, track, and manage their personal or professional goals. The application provides the functionality to create new goals, view existing goals, update their status, and delete them if necessary. It is built with a Python backend and a JavaScript frontend to deliver a smooth user experience.
 
