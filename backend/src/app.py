@@ -52,35 +52,59 @@ if os.getenv("ENVIRONMENT") == "production":
     dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
     app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
 
-@app.post("/chat", description="Get chat responses through this POST endpoint") 
-async def chat(request: Request):
-    body = await request.json()
-    return JSONResponse(content={"Your message": body}, status_code=200)
+# @app.post("/chat", description="Get chat responses through this POST endpoint") 
+# async def chat(request: Request):
+#     body = await request.json()
+#     return JSONResponse(content={"Your message": body}, status_code=200)
 
 # Define a request model
 class PromptRequest(BaseModel):
     prompt: str
     max_tokens: int = 100
 
-@app.post("/generate")
-async def generate_text(request: PromptRequest):
+@app.post("/api/generate_suggestion")
+# async def generate_text(request: PromptRequest):
+async def generate_text():
     try:
         # Send a request to OpenAI's API
         chat_completion = client.chat.completions.create(
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": "Respond in the form of JSON"},
                 {
                     "role": "user",
-                    "content": request.prompt,
+                    "content": 'Provide a suggestion for a personal or professional goal that person might want to start.  Please respond in the form of JSON with a key of "title" which will be the title of the goal and "description" which will be the description of that goal.',
                 }
             ],
             model="gpt-3.5-turbo",
-            max_tokens=request.max_tokens
+            max_tokens=100
         )
 
         # Extract the generated text
         generated_text = chat_completion.choices[0].message.content.strip()
-        return {"text": generated_text}
+        return JSONResponse(content={"text": generated_text}, media_type="application/json")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/generate_quote")
+async def generate_text():
+    try:
+        # Send a request to OpenAI's API
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": "Respond in the form of JSON"},
+                {
+                    "role": "user",
+                    "content": 'Provide a motivational quote in the form of JSON with a key of "quote".',
+                }
+            ],
+            model="gpt-3.5-turbo",
+            max_tokens=100
+        )
+
+        # Extract the generated text
+        generated_text = chat_completion.choices[0].message.content.strip()
+        return JSONResponse(content={"text": generated_text}, media_type="application/json")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -47,17 +47,6 @@ export const deleteGoal = async (goal_id)=> {
     }
 }
 
-export const getUsers = () => {
-    fetch(`${API_URL}/api/users`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-}
 
 export const getUserGoals = async(userId) => {
     try{
@@ -70,6 +59,54 @@ export const getUserGoals = async(userId) => {
         const goals = await res.json();
         return goals;
     } catch(e){
-        console.error('Error:', e)
+       
+    }
+}
+
+export const getUsers = () => {
+    fetch(`${API_URL}/api/users`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+}
+
+export const getGoalSuggestion = async() => {
+    try {
+        const res = await fetch(`${API_URL}/api/generate_suggestion`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const response = await res.json();  // Parse the outer JSON response
+        const suggestionText = response.text;// Extract the text field
+        const newGoal = JSON.parse(suggestionText); // Parse the nested JSON string
+        return newGoal;
+        
+    } catch (error) {
+        console.error('Error:', error)
+    }
+}
+
+export const getQuote = async() => {
+    try {
+        const res = await fetch(`${API_URL}/api/generate_quote`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        const response = await res.json();  // Parse the outer JSON response
+        const suggestionText = response.text;// Extract the text field
+        const quote = JSON.parse(suggestionText); // Parse the nested JSON string
+        return quote;
+        
+    } catch (error) {
+        console.error('Error:', error)
     }
 }

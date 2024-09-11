@@ -1,0 +1,144 @@
+#root, .ReactModal__Overlay, .ReactModal__Content {
+  font-family: 'HDColton', sans-serif;
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+
+  h1{
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  h2{
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  h3{
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  button{
+    cursor: pointer;
+    font-family: 'HDColton', sans-serif;
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-top: 5px;
+    padding: 10px;
+    font-size: .75rem;
+    border: 2px solid black;
+    text-align: center;
+    background-color: lightgreen;
+    color: black;
+  }
+  button:hover{
+    background-color: white;
+  }
+  strong{
+    font-weight: bold;
+    font-style: italic;
+  }
+  select{
+    font-family: 'HDColton', sans-serif;
+    cursor: pointer;
+    padding: 0px 10px;
+  }
+}
+
+@font-face {
+  font-family: 'HDColton';
+  src: url('/src/assets/hd_colton/HDColton-Regular.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HDColton';
+  src: url('/src/assets/hd_colton/HDColton-BlackItalic.otf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'HDColton';
+  src: url('/src/assets/hd_colton/HDColton-Bold.otf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.logo{
+  height: 50px;
+}
+
+
+.title-section{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: lightgreen;
+  padding: 1rem 0;
+  p{
+    width: 25vw;
+  }
+}
+
+.goal-index{
+  padding: 1rem;
+  .goal-index-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.goal-placeholder{
+  padding-top: 20px;
+}
+
+.goal{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  gap: 10px;
+  p{
+    font-size: .75rem;
+    
+  }
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.goal-form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  div{
+    display: flex;
+    gap: 10px;
+  }
+  .goal-buttons{
+    justify-content: center;
+  }
+}
