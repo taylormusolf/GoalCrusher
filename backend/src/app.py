@@ -1,6 +1,6 @@
 #running uvicorn server from backend folder -> uvicorn src.app:app --reload
 import os
-from fastapi import FastAPI, Request, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -8,9 +8,8 @@ from openai import OpenAI
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
-from . import models, schemas, crud, database
+from . import schemas, crud, database
 from starlette.responses import FileResponse
-# from backend.src.auth import create_access_token, get_current_user, verify_password, User, Token, TokenData
 
 # Load environment variables from .env file
 load_dotenv()
@@ -61,7 +60,6 @@ class PromptRequest(BaseModel):
     max_tokens: int = 100
 
 @app.post("/api/generate_suggestion")
-# async def generate_text(request: PromptRequest):
 async def generate_text():
     try:
         # Send a request to OpenAI's API
@@ -75,6 +73,30 @@ async def generate_text():
             ],
             model="gpt-3.5-turbo",
             max_tokens=100
+        )
+
+        # Extract the generated text
+        generated_text = chat_completion.choices[0].message.content.strip()
+        return JSONResponse(content={"text": generated_text}, media_type="application/json")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/generate_suggestions_via_prompt")
+async def generate_text(request: PromptRequest):
+    try:
+        # Send a request to OpenAI's API
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": "Respond in the form of JSON"},
+                {
+                    "role": "user",
+                    "content": f'''Provide a 5 suggestions for a personal or professional goal that person might want to start based off the prompt: {request.prompt}.  
+                    Please respond in the form of JSON with an array of objects containing a key of "title" which will be the title of the goal and "description" which will be the description of that goal.''',
+                }
+            ],
+            model="gpt-3.5-turbo",
+            max_tokens=500
         )
 
         # Extract the generated text
@@ -128,25 +150,6 @@ def read_goals(user_id: int, db: Session = Depends(get_db)):
 @app.get("/api/users", response_model=list[schemas.User])
 def get_users(db: Session = Depends(get_db)):
     return crud.get_users(db=db)
-
-# @app.post("/token", response_model=Token)
-# def login(form_data: User, db: Session = Depends(get_db)):
-#     user = db.query(models.User).filter(models.User.username == form_data.username).first()
-#     if not user or not verify_password(form_data.password, user.hashed_password):
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail="Incorrect username or password",
-#         )
-#     access_token = create_access_token(data={"username": user.username})
-#     return {"access_token": access_token, "token_type": "bearer"}
-
-# @app.get("/users/me", response_model=User)
-# def read_users_me(current_user: TokenData = Depends(get_current_user)):
-#     return current_user
-
-# @app.get("/secure-endpoint")
-# def secure_endpoint(current_user: TokenData = Depends(get_current_user)):
-#     return {"message": "This is a secure endpoint", "user": current_user.username}
 
 # Serve React static files
 if os.getenv("ENVIRONMENT") == "production":

@@ -3,6 +3,7 @@ import { getUserGoals, deleteGoal, modifyGoal } from '../api_util';
 import { useGoals } from '../context/GoalsContext';
 import Modal from 'react-modal';
 import GoalForm from './GoalForm'
+import GoalSuggestion from './GoalSuggestion';
 
 Modal.setAppElement('#root');
 
@@ -11,11 +12,15 @@ const GoalIndex = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedGoalId, setSelectedGoalId] = useState('');
     const [selectedGoalTitle, setSelectedGoalTitle] = useState('');
+    const [selectedGoalDescription, setSelectedGoalDescription] = useState('');
+    const [showInfoModal, setShowInfoModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
     useEffect(()=> {
         //fetch goals based on user Id
-        getUserGoals(1).then(goals => getGoals(goals)).then(_ => setLoading(false))
+        getUserGoals(1)
+        .then(goals => getGoals(goals.sort((a,b) => a.id - b.id))) //sort the goals for consistent order
+        .then(_ => setLoading(false))
     }, [])
 
     const handleStatusChange = (goal) => async e => {
@@ -33,11 +38,18 @@ const GoalIndex = () => {
         setSelectedGoalTitle(title);
         setShowDeleteModal(true)
     }
+    const handleGoalClick = (goal) => {
+        setShowInfoModal(true);
+        setSelectedGoalId(goal.id);
+        setSelectedGoalTitle(goal.title);
+        setSelectedGoalDescription(goal.description);
+    }
     return (
         <section className='goal-index'>
             <div className='goal-index-header'>
                 <h2>My Goals</h2>
                 <GoalForm />
+                <GoalSuggestion />
             </div>
             {loading ? 
                 <div className='goal-placeholder'>Loading...</div> : 
@@ -46,8 +58,7 @@ const GoalIndex = () => {
             ) : (
                 goals?.map((goal) => (
                     <div className='goal' key={goal.id}>
-                        <h3 style={{textDecoration: goal.status === 'completed' ? 'line-through' : ''}}>{goal.title}</h3>
-                        <p>{goal.description}</p>
+                        <h3 style={{cursor: 'pointer', textDecoration: goal.status === 'completed' ? 'line-through' : ''}} onClick={()=> handleGoalClick(goal)}>{goal.title}</h3>
                         <select name="" id="" defaultValue={goal.status} onChange={handleStatusChange(goal)}>
                             <option value="in-progress">In Progress</option>
                             <option value="completed">Completed</option>
@@ -69,6 +80,18 @@ const GoalIndex = () => {
                     <p>Are you sure you want to delete the <strong>{selectedGoalTitle}</strong> goal?</p>
                     <button onClick={()=> handleRemoveGoal(selectedGoalId)}>Yes</button>
                     <button onClick={()=> setShowDeleteModal(false)}>No</button>
+                </div>
+            </Modal>
+            <Modal
+                isOpen={showInfoModal}
+                onRequestClose={()=> setShowInfoModal(false)}
+                contentLabel="Goal Info"
+                className="modal"
+                overlayClassName="modal-overlay"
+            >
+                <div>
+                    <p><strong>{selectedGoalTitle}</strong></p>
+                    <p>{selectedGoalDescription}</p>
                 </div>
             </Modal>
         </section>

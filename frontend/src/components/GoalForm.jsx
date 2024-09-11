@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createGoal, getUsers, getGoalSuggestion } from '../api_util';
+import { createGoal, getGoalSuggestion } from '../api_util';
 import { useGoals } from '../context/GoalsContext';
 import Modal from 'react-modal';
 
@@ -39,13 +39,14 @@ const GoalForm = () => {
                 overlayClassName="modal-overlay"
             >
                 <form className='goal-form' onSubmit={handleSubmit}>
-                    <div>
+                    <div style={{padding:'5px'}}>
                         <label htmlFor='goal-title'>Title</label>
-                        <input id='goal-title' type="text" value={goal.title} onChange={handleFieldChange('title')} />
+                        <input required id='goal-title' type="text" value={goal.title} onChange={handleFieldChange('title')} />
+                        <button style={{padding:'5px', position:'relative', top:'-5px'}} onClick={handleSuggestion}>Get a suggestion</button>
                     </div>
                     <div>
                         <label htmlFor='goal-desc'>Description</label>
-                        <textarea id='goal-desc' type="text" value={goal.description} onChange={handleFieldChange('description')} />
+                        <textarea required id='goal-desc' type="text" value={goal.description} onChange={handleFieldChange('description')} />
                     </div>
                     <div>
                         <label htmlFor='goal-status'>Status</label>
@@ -55,7 +56,6 @@ const GoalForm = () => {
                             <option value="not-started">Not Started</option>
                         </select>
                     </div>
-                    <button onClick={handleSuggestion}>Get a suggestion</button>
                     <div className='goal-buttons'>
                         <button type="submit">Create Goal</button>
                         <button type="button" onClick={()=> setShowModal(false)}>Cancel</button>

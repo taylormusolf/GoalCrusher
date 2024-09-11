@@ -19,7 +19,7 @@ function App() {
         </section>
         <GoalIndex />
       </section>
-      <footer>Taylor Musolf</footer>
+      <footer>©2024 Taylor Musolf</footer>
     </main>
   )
 }

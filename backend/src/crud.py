@@ -23,30 +23,24 @@ def create_goal(db: Session, goal: schemas.GoalCreate, user_id: int):
     return db_goal
 
 def update_goal(db: Session, update_goal: schemas.GoalUpdate, goal_id: int):
-    # Query the goal by ID
     goal = db.query(models.Goal).filter(models.Goal.id == goal_id).first()
     
     if goal:
-        # Update goal attributes
         goal.title = update_goal.title
         goal.description = update_goal.description
         goal.status = update_goal.status
-        
-        # Commit the transaction
+
         db.commit()
         return goal
     else:
         raise ValueError("Goal not found")
 
 def delete_goal(db: Session, goal_id: int):
-    # Query the goal by ID
     goal = db.query(models.Goal).filter(models.Goal.id == goal_id).first()
     
     if goal:
-        # Delete the goal
         db.delete(goal)
         
-        # Commit the transaction
         db.commit()
         return {"detail": "Goal deleted successfully"}
     else:
