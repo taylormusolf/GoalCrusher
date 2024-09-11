@@ -37,7 +37,7 @@ app = FastAPI(
 origins = [
     "http://127.0.0.1:5173",
     "http://localhost:5173",
-    "https://goal-crusher-app-d59414deaeb3.herokuapp.com/"
+    "https://goal-crusher-app-d59414deaeb3.herokuapp.com"
 ]
 
 app.add_middleware(
@@ -48,14 +48,11 @@ app.add_middleware(
     allow_headers=["*"],     # Allow all headers
 )
 
+
 # Serve React static files
 if os.getenv("ENVIRONMENT") == "production":
     dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
     app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
-
-
-
-
 
 
 
@@ -135,6 +132,7 @@ def read_goals(user_id: int, db: Session = Depends(get_db)):
 def get_users(db: Session = Depends(get_db)):
     return crud.get_users(db=db)
 
+print(app.routes)
 # @app.post("/token", response_model=Token)
 # def login(form_data: User, db: Session = Depends(get_db)):
 #     user = db.query(models.User).filter(models.User.username == form_data.username).first()
@@ -163,8 +161,6 @@ async def serve_frontend():
 
 @app.get("/{path_name:path}")
 async def catch_all(path_name: str):
-    print(f"Hit the catchall route, {path_name}")
-    return {"message": "Catchall route hit", "path": path_name}
      # If the request path contains a file extension, don't serve index.html
     if "." not in path_name:
         return FileResponse(os.path.join(os.path.dirname(__file__), "../../frontend/dist/index.html"))
