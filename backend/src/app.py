@@ -49,7 +49,9 @@ app.add_middleware(
 )
 
 
-
+@app.post("/api/goals", response_model=schemas.Goal)
+def create_goal(goal: schemas.GoalCreate, user_id: int, db: Session = Depends(get_db)):
+    return crud.create_goal(db=db, goal=goal, user_id=user_id)
 
 
 
@@ -109,9 +111,7 @@ async def generate_text():
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
-@app.post("/api/goals/", response_model=schemas.Goal)
-def create_goal(goal: schemas.GoalCreate, user_id: int, db: Session = Depends(get_db)):
-    return crud.create_goal(db=db, goal=goal, user_id=user_id)
+
 
 @app.patch("/api/goals/{goal_id}", response_model=schemas.Goal)
 def update_goal(goal: schemas.GoalCreate, goal_id: int, db: Session = Depends(get_db)):
@@ -129,7 +129,6 @@ def read_goals(user_id: int, db: Session = Depends(get_db)):
 def get_users(db: Session = Depends(get_db)):
     return crud.get_users(db=db)
 
-print(app.routes)
 # @app.post("/token", response_model=Token)
 # def login(form_data: User, db: Session = Depends(get_db)):
 #     user = db.query(models.User).filter(models.User.username == form_data.username).first()
