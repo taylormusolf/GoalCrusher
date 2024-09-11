@@ -64,8 +64,15 @@
   font-style: normal;
 }
 
+main{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 98vh;
+}
+
 .logo{
-  height: 50px;
+  height: 60px;
 }
 
 
@@ -83,6 +90,7 @@
 
 .goal-index{
   padding: 1rem;
+  overflow: auto;
   .goal-index-header{
     display: flex;
     justify-content: center;

@@ -35,7 +35,8 @@ app = FastAPI(
 
 origins = [
     "http://127.0.0.1:5173",
-    "http://localhost:5173"  # Allow both localhost and 127.0.0.1
+    "http://localhost:5173",
+    "https://goal-crusher-app-d59414deaeb3.herokuapp.com/"
 ]
 
 app.add_middleware(
@@ -52,10 +53,14 @@ if os.getenv("ENVIRONMENT") == "production":
     dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
     app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
 
-# @app.post("/chat", description="Get chat responses through this POST endpoint") 
-# async def chat(request: Request):
-#     body = await request.json()
-#     return JSONResponse(content={"Your message": body}, status_code=200)
+@app.get("/")
+def test():
+    print('hello there')
+    return JSONResponse(content={"text": 'test text'}, media_type="application/json")
+
+
+
+
 
 # Define a request model
 class PromptRequest(BaseModel):

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.scss'
 import GoalIndex from './GoalIndex'
-import image from '../assets/logo.webp'
+import image from '../assets/dumbbells.png'
 import { getQuote } from '../api_util'
 
 function App() {
@@ -10,14 +10,17 @@ function App() {
     getQuote().then(newQuote => setQuote(newQuote.quote))
   }, [])
   return (
-    <>
-      <section className='title-section'>
-        {/* <img className='logo' src={image} alt='logo' /> */}
-        <h1>Goal Crusher</h1>
-        <p>{quote}</p>
+    <main>
+      <section className='content'>
+        <section className='title-section'>
+          <img className='logo' src={image} alt='logo' />
+          <h1>Goal Crusher</h1>
+          <p>{quote}</p>
+        </section>
+        <GoalIndex />
       </section>
-      <GoalIndex />
-    </>
+      <footer>Taylor Musolf</footer>
+    </main>
   )
 }
 
