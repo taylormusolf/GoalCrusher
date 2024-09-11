@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 from . import models, schemas, crud, database
+from starlette.responses import FileResponse
 # from backend.src.auth import create_access_token, get_current_user, verify_password, User, Token, TokenData
 
 # Load environment variables from .env file
@@ -48,15 +49,11 @@ app.add_middleware(
 )
 
 # Serve React static files
-print("enviro", os.getenv("ENVIRONMENT"))
 if os.getenv("ENVIRONMENT") == "production":
     dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
     app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
 
-@app.get("/")
-def test():
-    print('hello there')
-    return JSONResponse(content={"text": 'test text'}, media_type="application/json")
+
 
 
 
@@ -156,3 +153,13 @@ def get_users(db: Session = Depends(get_db)):
 # @app.get("/secure-endpoint")
 # def secure_endpoint(current_user: TokenData = Depends(get_current_user)):
 #     return {"message": "This is a secure endpoint", "user": current_user.username}
+
+
+# Serve the main entry point of the React app (index.html) for all unmatched routes
+@app.get("/")
+async def serve_frontend():
+    return FileResponse("../../frontend/dist/index.html")
+
+@app.get("/{path_name:path}")
+async def catch_all(path_name: str):
+    return FileResponse("../../frontend/dist/index.html")
