@@ -163,9 +163,12 @@ async def serve_frontend():
 
 @app.get("/{path_name:path}")
 async def catch_all(path_name: str):
+    print(f"Hit the catchall route, {path_name}")
+    return {"message": "Catchall route hit", "path": path_name}
      # If the request path contains a file extension, don't serve index.html
     if "." not in path_name:
         return FileResponse(os.path.join(os.path.dirname(__file__), "../../frontend/dist/index.html"))
     else:
         # Let StaticFiles handle the request for actual assets
         return None
+    
