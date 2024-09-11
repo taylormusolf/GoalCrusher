@@ -47,6 +47,7 @@ app.add_middleware(
 )
 
 # Serve React static files
+print("enviro", os.getenv("ENVIRONMENT"))
 if os.getenv("ENVIRONMENT") == "production":
     dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
     app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
