@@ -1,3 +1,3 @@
 web: uvicorn backend.src.app:app --host=0.0.0.0 --port=$PORT
-release: alembic upgrade head
+release: alembic -c backend/alembic.ini upgrade head
 
