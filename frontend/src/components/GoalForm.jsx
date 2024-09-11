@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createGoal, getGoalSuggestion } from '../api_util';
 import { useGoals } from '../context/GoalsContext';
+import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -26,6 +27,7 @@ const GoalForm = () => {
         addGoal(newGoal)
         setGoal({title: '', description: '', status: "not-started"});
         setShowModal(false);
+        toast("Goal Added!")
     };
 
     return (

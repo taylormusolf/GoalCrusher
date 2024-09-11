@@ -4,6 +4,7 @@ import { useGoals } from '../context/GoalsContext';
 import Modal from 'react-modal';
 import GoalForm from './GoalForm'
 import GoalSuggestion from './GoalSuggestion';
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
@@ -32,6 +33,7 @@ const GoalIndex = () => {
         const res = await deleteGoal(goal_id)
         removeGoal(goal_id);
         setShowDeleteModal(false);
+        toast("Goal Successfully Deleted!")
     }
     const handleDeleteModal = (id, title) => {
         setSelectedGoalId(id);

@@ -40,6 +40,8 @@
     cursor: pointer;
     padding: 0px 10px;
   }
+  --toastify-color-progress-light: lightgreen;
+  --toastify-font-family: 'HDColton', sans-serif; 
 }
 
 @font-face {
@@ -79,6 +81,10 @@ main{
 .logo{
   height: 60px;
 }
+.quote{
+  font-size: 1rem;
+}
+
 
 
 .title-section{
@@ -91,6 +97,15 @@ main{
   padding: 1rem 0;
   p{
     width: 25vw;
+  }
+}
+
+@media (max-width: 700px) {
+  .quote {
+    display: none;
+  }
+  .title-section{
+    gap: 0px;
   }
 }
 

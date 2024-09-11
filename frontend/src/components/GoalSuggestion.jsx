@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Modal from 'react-modal';
 import { getGoalSuggestionsViaPrompt, createGoal } from '../api_util';
 import { useGoals } from '../context/GoalsContext';
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
@@ -23,6 +24,7 @@ const GoalSuggestion = () => {
         e.preventDefault();
         const newGoal = await createGoal({...goal, status:'not-started'});
         addGoal(newGoal);
+        toast("Goal Added!")
     };
 
     return(
@@ -36,9 +38,11 @@ const GoalSuggestion = () => {
                 overlayClassName="modal-overlay"
             >
                 <div>
-                    <p>What are you trying to do?</p>
-                    <input required value={prompt} onChange={e => setPrompt(e.target.value)}/>
-                    <button onClick={handleSubmit} style={{padding:'5px'}}>Get Suggestions</button>
+                    <p>What are you trying to accomplish?</p>
+                    <form onSubmit={handleSubmit}>
+                        <input required value={prompt} onChange={e => setPrompt(e.target.value)}/>
+                        <button style={{padding:'5px'}}>Get Suggestions</button>
+                    </form>
                     { loading ? <div>Loading...</div> : goals?.map((goal, i) => (
                         <ul style={{padding:'10px'}} key={i}>
                             <li><strong>{goal.title}</strong></li>

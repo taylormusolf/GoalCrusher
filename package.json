@@ -1,8 +1,8 @@
 {
     "scripts": {
-      "heroku-postbuild": "npm install -g vite && cd frontend && npm install && npm run build"
+        "heroku-postbuild": "npm install -g vite && cd frontend && npm install && npm run build"
     },
-  "engines": {
-    "node": ">=21.x"
-  }
+    "engines": {
+        "node": ">=21.x"
+    }
 }
