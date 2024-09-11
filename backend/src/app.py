@@ -158,8 +158,10 @@ def get_users(db: Session = Depends(get_db)):
 # Serve the main entry point of the React app (index.html) for all unmatched routes
 @app.get("/")
 async def serve_frontend():
-    return FileResponse("../../frontend/dist/index.html")
+    frontend_path = os.path.join(os.path.dirname(__file__), "../../frontend/dist/index.html")
+    return FileResponse(frontend_path)
 
 @app.get("/{path_name:path}")
 async def catch_all(path_name: str):
-    return FileResponse("../../frontend/dist/index.html")
+    frontend_path = os.path.join(os.path.dirname(__file__), "../../frontend/dist/index.html")
+    return FileResponse(frontend_path)
