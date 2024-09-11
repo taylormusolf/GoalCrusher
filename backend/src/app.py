@@ -149,6 +149,10 @@ print(app.routes)
 # def secure_endpoint(current_user: TokenData = Depends(get_current_user)):
 #     return {"message": "This is a secure endpoint", "user": current_user.username}
 
+# Serve React static files
+if os.getenv("ENVIRONMENT") == "production":
+    dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
+    app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
 
 # Serve the main entry point of the React app (index.html) for all unmatched routes
 @app.get("/")
@@ -165,7 +169,3 @@ async def catch_all(path_name: str):
         # Let StaticFiles handle the request for actual assets
         return None
     
-# Serve React static files
-if os.getenv("ENVIRONMENT") == "production":
-    dist_folder_path = os.path.join(os.path.dirname(__file__), '../../frontend/dist')
-    app.mount("/", StaticFiles(directory=dist_folder_path, html=True), name="static")
